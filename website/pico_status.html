@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<!-- saved from url=(0085)file:///Users/bjenner/Development/rpi_pico/Pico-Pixel-Web/website/controls/index.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pico Pixel Web</title>
+    </head>
+    <body>
+        <h2><a href="/">Pixel Controller</a> > Status > Pico</h2>
+        <p>Status of the pico!</p>
+	    <p>Temp: {{ str( temp ) }} C</p>
+	    <p>Memory: {{ str( mem ) }} KB</p>
+	    
+        <button id="resetBtn">Reset Board</button>
+        <script src="data:text/javascript,document.getElementById(&#39;resetBtn&#39;).onclick = async function() { await fetch(&#39;/reset&#39;); };" defer=""></script>
+    
+</body></html>

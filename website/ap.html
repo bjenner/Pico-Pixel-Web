@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Pico Pixel Controller</title>
+    </head>
+    <body>
+        <h2><a href="/">Pixel Controller</a> > Configuration > Access Point</h2>
+        <p>If the pico is unable to connect to a network it will start in AP mode.</p>
+        <form action="/configure" method="POST" autocomplete="off" autocapitalize="none">
+            <label for="ssid">SSID:</label><br>
+            <input type="text" id="ssid" name="ssid" value={{"\"" + ssid + "\""}}><br><br/>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password" value={{"\"" + password + "\""}}><br>
+            
+            <input type="radio" id="enable" name="enable_ap" value="On">
+            <label for="enable">Enable</label>
+            <input type="radio" id="disabled" name="enable_ap" value="Off">
+            <label for="disabled">Disabled</label>
+            <br><br>
+            <button>Save</button>
+        </form>
+        
+    </body>
+</html>
+

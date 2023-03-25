@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Pico Pixel Controller</title>
+    </head>
+    <body>
+         <h2><a href="/">Pixel Controller</a> > Configuration > Threads</h2>
+        <p>Configure what should run in the primary and secondary threads.</p>
+        <form action="/configure" method="POST" autocomplete="off" autocapitalize="none">
+            <h3>Primary Thread:{{prim}}</h3>
+            <input type="radio" id="test" name="primary" value="test" {{checked[0]}}>
+            <label for="test">Test Primary</label><br>
+            <input type="radio" id="web" name="primary" value="web" {{checked[1]}} >
+            <label for="web">Website</label><br>
+            <input type="radio" id="no_prim" name="primary" value="none" >
+            <label for="no_prim">Dummy Primary</label><br>
+            <h3>Secondary Thread: {{second}}</h3> 
+            id=
+	    	<input type="radio" id="{{ webmap[0]['id'] }} " name="secondary" value="{{ webmap[0]['value'] }}">
+    		<label for="secondary">{{ webmap[0]['label'] }}</label><br>
+            <input type="radio" id="firefly_sec" name="secondary" value="fireflies">
+            <label for="secondary">Firefly Pixels</label><br>
+            <input type="radio" id="colourwave_sec" name="secondary" value="colourwave">
+            <label for="secondary">Colour Wave Pixels</label><br>
+            <input type="radio" id="trail_sec" name="secondary" value="trail">
+            <label for="secondary">Pixel Trail</label><br>
+            <input type="radio" id="rainbow_sec" name="secondary" value="rainbow">
+            <label for="secondary">Smooth Rainbow Pixels</label><br>
+            <br>
+            <button>Save</button>
+           
+        </form>
+
+    </body>
+</html>
+
