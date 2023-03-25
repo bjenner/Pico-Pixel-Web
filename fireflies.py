@@ -1,7 +1,7 @@
-import time
+from time import sleep
 from neopixel import Neopixel
 from mylogging import safe_print
-import random
+from random import randint
 
 numpix = 50  # Number of NeoPixels
 # Pin where NeoPixels are connected
@@ -31,9 +31,9 @@ flashing = []
 num_flashes = 10
 
 for i in range(num_flashes):
-    pix = random.randint(0, numpix - 1)
-    col = random.randint(1, len(colors) - 1)
-    flash_len = random.randint(min_len, max_len)
+    pix = randint(0, numpix - 1)
+    col = randint(1, len(colors) - 1)
+    flash_len = randint(min_len, max_len)
     flashing.append([pix, colors[col], flash_len, 0, 1])
     
 strip.fill((0,0,0))
@@ -52,12 +52,12 @@ def firefly_step():
         if flashing[i][2] == flashing[i][3]:
             flashing[i][4] = -1
         if flashing[i][3] == 0 and flashing[i][4] == -1:
-            pix = random.randint(0, numpix - 1)
-            col = random.randint(0, len(colors) - 1)
-            flash_len = random.randint(min_len, max_len)
+            pix = randint(0, numpix - 1)
+            col = randint(0, len(colors) - 1)
+            flash_len = randint(min_len, max_len)
             flashing[i] = [pix, colors[col], flash_len, 0, 1]
         flashing[i][3] = flashing[i][3] + flashing[i][4]
-        time.sleep(0.005)
+        sleep(0.005)
  
 
 def firefly_role():
