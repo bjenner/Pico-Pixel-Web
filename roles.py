@@ -55,7 +55,7 @@ class Roles:
     
     @classmethod
     def default_secondary(cls):
-        dummy_role
+        return dummy_role
     
     @classmethod
     def primary_map(cls):

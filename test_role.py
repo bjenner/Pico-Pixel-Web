@@ -24,10 +24,10 @@ class TestRoles(unittest.TestCase):
         self.assertEqual(Roles.get_webmap(), expected_webmap)
 
     def test_default_primary(self):
-        self.assertEqual(Roles.default_primary.__name__, "dummy_role")
+        self.assertEqual(Roles.default_primary().__name__, "dummy_role")
 
     def test_default_secondary(self):
-        self.assertEqual(Roles.default_secondary.__name__, "dummy_role")
+        self.assertEqual(Roles.default_secondary().__name__, "dummy_role")
 
     def test_primary_map(self):
         expected_map = {
