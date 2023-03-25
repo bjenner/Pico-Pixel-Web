@@ -1,19 +1,19 @@
 import unittest
 from fireflies import firefly_step
-import time
+from time import sleep
 from neopixel import Neopixel
 
 class TestFireflies(unittest.TestCase):
 
     def setUp(self):
-        global time
+        global sleep
         global Neopixel
         
-        self.original_time_sleep = time.sleep
+        self.original_sleep = sleep
         self.original_neopixel = Neopixel
 
         # Mock time.sleep to avoid waiting during testing
-        time.sleep = lambda x: None
+        sleep = lambda x: None
 
         # Mock the Neopixel class to avoid hardware interactions
         class MockNeopixel:
@@ -32,10 +32,10 @@ class TestFireflies(unittest.TestCase):
         Neopixel = MockNeopixel
 
     def tearDown(self):
-        global time
+        global sleep
         global Neopixel
 
-        time.sleep = self.original_time_sleep
+        sleep = self.original_sleep
         Neopixel = self.original_neopixel
 
     def test_firefly_step(self):
