@@ -36,6 +36,10 @@ def trail_role():
 
     while True:
         trail_step()
+        
+# Add this function to your trail.py module
+def get_strip():
+    return strip
 
 if __name__ == "__main__":
     safe_print("trail testing...")
