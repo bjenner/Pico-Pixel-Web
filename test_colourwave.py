@@ -1,16 +1,19 @@
 import unittest
 from colourwave import colourwave_role
-import time
+from time import sleep
 from neopixel import Neopixel
 
 class TestColourWave(unittest.TestCase):
 
     def setUp(self):
-        self.original_time_sleep = time.sleep
+        global sleep
+        global Neopixel
+
+        self.original_sleep = sleep
         self.original_neopixel = Neopixel
 
         # Mock time.sleep to avoid waiting during testing
-        time.sleep = lambda x: None
+        sleep = lambda x: None
 
         # Mock the Neopixel class to avoid hardware interactions
         class MockNeopixel:
@@ -32,7 +35,7 @@ class TestColourWave(unittest.TestCase):
         Neopixel = MockNeopixel
 
     def tearDown(self):
-        time.sleep = self.original_time_sleep
+        sleep = self.original_sleep
         Neopixel = self.original_neopixel
 
     def test_colourwave_role(self):

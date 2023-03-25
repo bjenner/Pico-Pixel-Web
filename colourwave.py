@@ -1,7 +1,7 @@
 # Example showing how functions, that accept tuples of rgb values,
 # simplify working with gradients
 
-import time
+from time import sleep
 from neopixel import Neopixel
 from mylogging import safe_print
 
@@ -43,7 +43,7 @@ def colourwave_role():
     while True:
         #print( ".", end="" )
         strip.rotate_right(1)
-        time.sleep(0.042)
+        sleep(0.042)
         strip.show()
 
 if __name__ == "__main__":
