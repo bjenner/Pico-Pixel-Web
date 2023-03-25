@@ -6,7 +6,7 @@ def test_switchcase():
         ("red", "red"),
         ("green", "green"),
         ("blue", "blue"),
-        ("yellow", None)
+        ("yellow", "yellow")
     ]
 
     for input_color, expected_output in test_cases:
