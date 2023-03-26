@@ -31,22 +31,16 @@ and runs the secondary role.
 
 '''
 import _thread
-import machine
-from pico_config import PicoConf
-from mylogging import safe_print
+from picoconfig import PicoConf, ThreadConf
+from picoweb import PicoWeb
 
 # this may help with memory errors. 
-import gc
-gc.threshold( 50000 ) # setup garbage collection
 
-safe_print( "Initializing system" )
-PicoConf.read_file()
+PicoConf.init()
+PicoWeb.init()
     
-safe_print( "launch secondary" )
-thread_one = _thread.start_new_thread(PicoConf.secondary_role, ())
-
-safe_print( "launch primary" )
-PicoConf.primary_role()
+thread_one = _thread.start_new_thread(ThreadConf.start_secondary, ())
+ThreadConf.start_primary()
 
 
 

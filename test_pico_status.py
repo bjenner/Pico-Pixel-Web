@@ -1,5 +1,5 @@
 import unittest
-from pico_status import PicoStatus
+from picostatus import PicoStatus
 
 class TestPicoStatus(unittest.TestCase):
 

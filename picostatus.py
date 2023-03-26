@@ -1,5 +1,5 @@
 '''
-pico_status.py = status of the device 
+picostatus.py = status of the device 
 '''
 from machine import ADC
 import gc

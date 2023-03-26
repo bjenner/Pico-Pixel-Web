@@ -43,7 +43,7 @@ def colourwave_role():
     while True:
         #print( ".", end="" )
         strip.rotate_right(1)
-        sleep(0.042)
+        sleep(0.1)
         strip.show()
 
 if __name__ == "__main__":

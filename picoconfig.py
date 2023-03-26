@@ -1,11 +1,10 @@
 '''
-pico_config.py = configuration of the device 
+picoconfig.py = configuration of the device 
 '''
-import _thread
-import machine
 import os
 import json
 from roles import Roles
+import time
 
 from mylogging import safe_print
 from switchcase import switch, case
@@ -137,12 +136,27 @@ class ThreadConf:
 
     @classmethod
     def start_primary( cls ):
+        print("hello")
+        time.sleep(2)
         role_map = Roles.primary_map()
+        safe_print( f"role map: {role_map}" )
+        safe_print( f"primary: {cls.primary_role}" )
         role_map[cls.primary_role]()
 
     @classmethod
     def start_secondary( cls ):
+        safe_print( "Start Secondary" )
         role_map = Roles.secondary_map()
+        safe_print( f"role map: {role_map}" )
+        safe_print( f"second: {cls.secondary_role}" )
+        role_map[cls.secondary_role]()
+
+    @classmethod
+    def secondary( cls ):
+        safe_print( "Secondary" )
+        role_map = Roles.secondary_map()
+        safe_print( f"role map: {role_map}" )
+        safe_print( f"second: {cls.secondary_role}" )
         role_map[cls.secondary_role]()
 
     @classmethod
@@ -152,6 +166,7 @@ class ThreadConf:
 
     @classmethod
     def save_roles( cls, roles ):
+        safe_print( f"save_roles: {roles}" )
         ThreadConf.set_primary( roles["Primary Role"] )
         ThreadConf.set_secondary( roles["Secondary Role"] )
                 
@@ -198,97 +213,52 @@ class PicoConf:
         return config
         
     @classmethod
-    def config2html( cls, config ):
-        
-        html = ""
-        #html = "<div>\n"
-        for section_label in config.keys():
-            html += "<h2>" + section_label + "</h2>\n"
-            section = config[section_label]
-            
-            html += "<ul>\n"
-            for item_label in section.keys():
-                
-                html += "<li> " + "{:<25}".format(item_label + ":") 
-                item = section[item_label]
-                html += str(item) + "</li>\n"
-            
-            html += "</ul>\n"
-        #html += "</div>\n"
-
-        return html
-    
-    @classmethod
     def read_file(cls):
         
         if ( False == file_exists(cls.filename) ):
-            PicoConf.create_defaults()
+            cls.create_defaults()
 
-        config = PicoConf.load_config()
+        config = cls.load_config()
         
-        PicoConf.save_config(config)
-            
-    @classmethod    
-    def pico_conf_read():
-
-        # a Python object (dict):
-        x = {
-          "name": "John",
-          "age": 30,
-          "city": "New York"
-        }
-
-        # convert into JSON:
-        y = json.dumps(x)
-
-        # the result is a JSON string:
-        print(y)
-
-        os.listdir()
-
-        os.mkdir('testdir')
-
-        f = open('testdir/data.txt', 'w')
-        f.write(y)
+        cls.save_config(config)
+                  
+    @classmethod
+    def pico_conf_write(cls):
+        safe_print( f"writing to {PicoConf.filename}" )
+        f = open(PicoConf.filename, 'w')
+        f.write(json.dumps(cls.get_config()))
         f.close()
-
-        f = open('testdir/data.txt')
-        z = json.loads(f.read())
-        print (z)
-        f.close()
-
-        #os.remove('testdir/data.txt')
-        #os.remove('testdir')
         
     @classmethod
-    def pico_conf_write():
-        pass
+    def init( cls ):
+        cls.read_file()
         
-
 if __name__ == "__main__":
-    
-    PicoConf.read_file()
-    
-    print( "Configuration:" )
-    print( "SSID: " + WifiConf.ssid() )
-    print( "Password: " + WifiConf.password() )
+    import _thread
+    import machine
 
-    print( "AP SSID: " + APConf.ssid() )
-    print( "AP Password: " + APConf.password() )
+    PicoConf.init()
+    
+    safe_print( "Configuration:" )
+    safe_print( "SSID: " + WifiConf.ssid() )
+    safe_print( "Password: " + WifiConf.password() )
 
-    print( "Roles" )
-    print( ThreadConf.get_roles() )
+    safe_print( "AP SSID: " + APConf.ssid() )
+    safe_print( "AP Password: " + APConf.password() )
+
+    safe_print( "Roles" )
+    safe_print( ThreadConf.get_roles() )
     
     config = PicoConf.get_config()
-    print( "Config" )
-    print( config )
+    safe_print( "Config" )
+    safe_print( config )
 
-    print( "HTML" )
-    html = PicoConf.config2html( config )
-    
-    print( html ) 
-    #thread_one = _thread.start_new_thread(ThreadConf.start_secondary, ())
+    #safe_print( f"Primary fn {ThreadConf.start_primary}" )
+    safe_print( f"Secondary fn {ThreadConf.secondary}" )
+    #ThreadConf.start_secondary()()
+    thread_one = _thread.start_new_thread(ThreadConf.start_secondary, ())
     #ThreadConf.start_primary()
+    safe_print( "Here" )
 
 else:
     safe_print( __name__ + " imported")

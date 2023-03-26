@@ -1,5 +1,5 @@
 import unittest
-from pico_config import PicoConf, WifiConf, APConf, ThreadConf, file_exists
+from picoconfig import PicoConf, WifiConf, APConf, ThreadConf, file_exists
 
 class TestPicoConfig(unittest.TestCase):
 

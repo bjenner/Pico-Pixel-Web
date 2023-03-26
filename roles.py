@@ -7,7 +7,7 @@ import colourwave
 import fireflies
 import smoothrainbow
 import trail
-import test_roles
+import testroles
 
 def dummy_role():
     print("dummy")
@@ -15,14 +15,15 @@ def dummy_role():
         pass
 
 class Roles:
-        
+    
     map = {
         'primary': {
-            'test': test_roles.test_primary,
+            'test': testroles.test_primary,
+            'web': dummy_role,
             'none': dummy_role
         },
         'secondary': {
-            'test': test_roles.test_secondary,
+            'test': testroles.test_secondary,
             'fireflies': fireflies.firefly_role,
             'colourwave': colourwave.colourwave_role,
             'trail': trail.trail_role,
@@ -30,6 +31,12 @@ class Roles:
             'none': dummy_role
         }
     }
+    
+    @classmethod
+    def set_role(cls, thread, name, role):
+        safe_print( f"Setting {thread} role to {name} with fn {role}" )
+        cls.map[thread][name] = role
+        
     '''        
     <input type="radio" id="{{ webmap[0]['id']" name="secondary" value="{{ webmap[0]['value']">
     <label for="secondary">{{ webmap[0]['label'] }}</label><br>
@@ -41,29 +48,101 @@ class Roles:
     <input type="radio" id="rainbow_sec" name="secondary" value="rainbow">
     <label for="secondary">Smooth Rainbow Pixels</label><br>
 '''
-    webmap = [
-        { "label": "Test Secondary",
-          "id": "secondary",
-          "value": "test"} ]
+    webmap = {
+        "primary": 
+        [ 
+            { "label": "Test Primary",
+              "id": "test_prim",
+              "value": "test",
+              "checked": ""},
+            { "label": "Web Server",
+              "id": "web_prim",
+              "value": "web",
+              "checked": ""},
+            { "label": "Dummy Primary",
+              "id": "dumb_prim",
+              "value": "none",
+              "checked": ""},
+        ],
+        "secondary": 
+        [ 
+            { "label": "Test Secondary",
+              "id": "test_sec",
+              "value": "test",
+              "checked": ""},
+            { "label": "Fireflies",
+              "id": "firefly_sec",
+              "value": "fireflies",
+              "checked": ""},
+            { "label": "Colour Wave",
+              "id": "colour_sec",
+              "value": "colourwave",
+              "checked": ""},
+            { "label": "Pixel Trail",
+              "id": "trail_sec",
+              "value": "trail",
+              "checked": ""},
+            { "label": "Smooth Rainbow Pixels",
+              "id": "smooth_sec",
+              "value": "rainbow",
+              "checked": ""},
+            { "label": "Dummy Secondary",
+              "id": "dumb_sec",
+              "value": "none",
+              "checked": ""},
+        ]
+
+    }
+
+    @classmethod
+    def set_checked(cls, primary, secondary):
+        
+        def update_checked( thread, current ):
+        
+            safe_print( "thread " + thread )
+            safe_print( "current " + current )
+            for item in cls.webmap[thread]:
+                if item['value'] == current:
+                    item['checked'] = "checked"
+                    #safe_print( f"checked: {primary} {current}" )
+                else:
+                    item['checked'] = ""
+                    #safe_print( f"unchecked: {primary} {current}" )
+
+                safe_print(item)
+        
+        update_checked( 'primary', primary  )
+        update_checked( 'secondary', secondary  )
+
+        safe_print("done")
+
     @classmethod
     def get_webmap( cls ):
         return cls.webmap
     
     @classmethod
-    def default_primary(cls):
+    def default_primary( cls ):
         return dummy_role
     
     @classmethod
-    def default_secondary(cls):
+    def default_secondary( cls ):
         return dummy_role
     
     @classmethod
-    def primary_map(cls):
+    def primary_map( cls ):
         return( cls.map['primary'] )
     
     @classmethod
-    def secondary_map(cls):
+    def secondary_map( cls ):
         return( cls.map['secondary'] )
+    
+    @classmethod
+    def check_role( cls, thread, role, fn ):
+        current = cls.map[thread][role]
+        if (current == fn):
+            safe_print("match")
+        else:
+            safe_print("no match")
     
 if __name__ == "__main__":
 
@@ -78,6 +157,14 @@ if __name__ == "__main__":
 
     safe_print( "secondary map" )
     safe_print( Roles.secondary_map() )
+    
+    Roles.set_checked( "test", "rainbow" )
+    
+    def foo():
+        pass
+    
+    Roles.set_role( "primary", "web", foo )
+    Roles.check_role( "primary", "web", foo )
     
 else:
     safe_print( "roles imported")

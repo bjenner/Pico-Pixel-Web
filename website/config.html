@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pico Pixel Controller Website</title>
+    </head>
+    <body>
+        <h2>Configuration</h2>
+        <a href="/">Pixel Controller</a> > Configuration        
+        <ul>
+        <li><a href="/config/wifi">WiFi</a></li>
+        <li><a href="/config/ap">Access Point</a></li>
+        <li><a href="/config/threads">Threads</a></li>
+        </ul>
+        
+        <button id="saveBtn">Save</button>
+        <script src="data:text/javascript,document.getElementById(&#39;saveBtn&#39;).onclick = async function() { await fetch(&#39;/save&#39;); };" defer=""></script>
+        
+        <button id="rebootBtn">Reboot</button>
+        <script src="data:text/javascript,document.getElementById(&#39;rebootBtn&#39;).onclick = async function() { await fetch(&#39;/reboot&#39;); };" defer=""></script>
+
+    </body>
+</html>
