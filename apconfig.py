@@ -56,3 +56,11 @@ class APConf:
                 "Access Point SSID": "Pico Pixel Web",
                 "Access Point Password": ""}
 
+if __name__ == "__main__":
+
+    safe_print("AP SSID: " + APConf.ssid())
+    safe_print("AP Password: " + APConf.password())
+
+else:
+    safe_print(__name__ + " imported")
+
