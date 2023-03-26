@@ -9,8 +9,10 @@ import machine
 import os
 import utime
 import gc
-
-from picoconfig import PicoConf, WifiConf, APConf, ThreadConf
+from wificonfig import WifiConf
+from apconfig import APConf
+from threadconfig import ThreadConf
+from picoconfig import PicoConf
 from picostatus import PicoStatus
 from mylogging import safe_print
 from roles import Roles
