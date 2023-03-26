@@ -3,62 +3,69 @@ from neopixel import Neopixel
 from mylogging import safe_print
 from random import randint
 
-numpix = 50  # Number of NeoPixels
-# Pin where NeoPixels are connected
-strip = Neopixel(numpix, 0, 28, "GRB")
+# Constants
+NUM_PIXELS = 50
+NUM_FLASHES = 10
+MIN_LENGTH = 5
+MAX_LENGTH = 20
+NEOPIXEL_PIN = 28
 
-colors_rgb = [
+# Colors
+COLORS = [
     (232, 100, 255),  # Purple
-    (200, 200, 20),  # Yellow
-    (30, 200, 200),  # Blue
-    (150,50,10),
-    (50,200,10),
+    (200, 200, 20),   # Yellow
+    (30, 200, 200),   # Blue
+    (150, 50, 10),
+    (50, 200, 10),
 ]
 
-# same colors as normaln rgb, just 0 added at the end
-colors_rgbw = [color+tuple([0]) for color in colors_rgb]
-colors_rgbw.append((0, 0, 0, 255))
+# Initialize the NeoPixel strip
+strip = Neopixel(NUM_PIXELS, 0, NEOPIXEL_PIN, "GRB")
 
-# uncomment colors_rgbw if you have RGBW strip
-colors = colors_rgb
-# colors = colors_rgbw
+# Initialize the flashing list with random values
+flashing = [
+    [
+        randint(0, NUM_PIXELS - 1),
+        COLORS[randint(1, len(COLORS) - 1)],
+        randint(MIN_LENGTH, MAX_LENGTH),
+        0,
+        1,
+    ]
+    for _ in range(NUM_FLASHES)
+]
 
-max_len=20
-min_len = 5
-#pixelnum, posn in flash, flash_len, direction
-flashing = []
+# Clear the strip
+strip.fill((0, 0, 0))
 
-num_flashes = 10
-
-for i in range(num_flashes):
-    pix = randint(0, numpix - 1)
-    col = randint(1, len(colors) - 1)
-    flash_len = randint(min_len, max_len)
-    flashing.append([pix, colors[col], flash_len, 0, 1])
-    
-strip.fill((0,0,0))
 
 def firefly_step():
     strip.show()
-    for i in range(num_flashes):
 
-        pix = flashing[i][0]
-        brightness = (flashing[i][3]/flashing[i][2])
-        colr = (int(flashing[i][1][0]*brightness), 
-                int(flashing[i][1][1]*brightness), 
-                int(flashing[i][1][2]*brightness))
-        strip.set_pixel(pix, colr)
+    for i in range(NUM_FLASHES):
+        pixel_index = flashing[i][0]
+        color = flashing[i][1]
+        flash_length = flashing[i][2]
+        progress = flashing[i][3]
+        direction = flashing[i][4]
 
-        if flashing[i][2] == flashing[i][3]:
-            flashing[i][4] = -1
-        if flashing[i][3] == 0 and flashing[i][4] == -1:
-            pix = randint(0, numpix - 1)
-            col = randint(0, len(colors) - 1)
-            flash_len = randint(min_len, max_len)
-            flashing[i] = [pix, colors[col], flash_len, 0, 1]
-        flashing[i][3] = flashing[i][3] + flashing[i][4]
+        brightness = progress / flash_length
+        adjusted_color = (
+            int(color[0] * brightness),
+            int(color[1] * brightness),
+            int(color[2] * brightness),
+        )
+        strip.set_pixel(pixel_index, adjusted_color)
+
+        if progress == flash_length:
+            direction = -1
+        elif progress == 0 and direction == -1:
+            pixel_index = randint(0, NUM_PIXELS - 1)
+            color = COLORS[randint(0, len(COLORS) - 1)]
+            flash_length = randint(MIN_LENGTH, MAX_LENGTH)
+            flashing[i] = [pixel_index, color, flash_length, 0, 1]
+
+        flashing[i][3] = progress + direction
         sleep(0.005)
- 
 
 def firefly_role():
 
