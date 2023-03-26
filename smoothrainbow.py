@@ -2,16 +2,15 @@ import time
 from neopixel import Neopixel
 from mylogging import safe_print
 
-# Add a variable to limit the number of iterations
-iterations_limit = None
+ITERATIONS_LIMIT = None
 
 def rainbow_role():
-    numpix = 50
-    strip = Neopixel(numpix, 0, 28, "GRB")
-
+    num_pixels = 50
+    strip = Neopixel(num_pixels, 0, 28, "GRB")
     hue = 0
     iterations = 0
-    while(True):
+
+    while True:
         color = strip.colorHSV(hue, 255, 100)
         strip.fill(color)
         strip.show()
@@ -19,9 +18,9 @@ def rainbow_role():
         hue += 150
 
         # Increment the iterations and break the loop if the limit is reached
-        if iterations_limit is not None:
+        if ITERATIONS_LIMIT is not None:
             iterations += 1
-            if iterations >= iterations_limit:
+            if iterations >= ITERATIONS_LIMIT:
                 break
     
 if __name__ == "__main__":
