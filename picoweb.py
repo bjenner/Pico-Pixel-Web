@@ -16,6 +16,7 @@ from picoconfig import PicoConf
 from picostatus import PicoStatus
 from mylogging import safe_print
 from roles import Roles
+from wifi import Wifi
 
 class PicoWeb:
     
@@ -116,18 +117,16 @@ class PicoWeb:
 
     @classmethod
     def website_role( cls ):
-        Wifi.start()
+        gc.threshold( 50000 ) # setup garbage collection
         cls.setup_website()
         server.run()
 
     @classmethod
     def init( cls ):
-        gc.threshold( 50000 ) # setup garbage collection
+        Wifi.start()
+        return
 
-        def role():
-            PicoWeb.website_role()
-        Roles.set_role( 'primary', 'web', role )
-        Roles.check_role( 'primary', 'web', role )
+Roles.set_role( 'primary', 'web', PicoWeb.website_role )
     
 
 # Start the web server...
