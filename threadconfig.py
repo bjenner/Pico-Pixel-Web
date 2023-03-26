@@ -1,6 +1,7 @@
 '''
 threadconfig - Thread Configuration
 '''
+from roles import Roles
 
 class ThreadConf:
     primary_role = None

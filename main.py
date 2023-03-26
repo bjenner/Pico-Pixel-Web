@@ -32,7 +32,7 @@ and runs the secondary role.
 '''
 import _thread
 from picoconfig import PicoConf
-from threadconfig improt ThreadConf
+from threadconfig import ThreadConf
 from picoweb import PicoWeb
 
 # this may help with memory errors. 
