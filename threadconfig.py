@@ -16,6 +16,14 @@ class ThreadConf:
         cls.secondary_role = role
 
     @classmethod
+    def init_primary(cls):
+        Roles.init_primary(cls.primary_role)
+
+    @classmethod
+    def init_secondary(cls):
+        Roles.init_secondary(cls.secondary_role)
+
+    @classmethod
     def start_primary(cls):
         Roles.start_primary(cls.primary_role)
 

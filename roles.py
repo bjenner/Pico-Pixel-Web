@@ -23,16 +23,16 @@ class Roles:
     map = {
         'primary': {
             'test': {'init': testroles.test_init, 'start': testroles.test_primary},
-            'web': {'init': dummy_init, 'start': dummy_role},
-            'none': {'init': dummy_init, 'start': dummy_role}
+            'web': {'init': None, 'start': dummy_role},
+            'none': {'init': None, 'start': dummy_role}
         },
         'secondary': {
-            'test': {'init': dummy_init, 'start': testroles.test_secondary},
-            'fireflies': {'init': dummy_init, 'start': fireflies.firefly_role},
-            'colourwave': {'init': dummy_init, 'start': colourwave.colourwave_role},
-            'trail': {'init': dummy_init, 'start': trail.trail_role},
-            'rainbow': {'init': dummy_init, 'start': smoothrainbow.rainbow_role},
-            'none': {'init': dummy_init, 'start': dummy_role}
+            'test': {'init': testroles.test_init, 'start': testroles.test_secondary},
+            'fireflies': {'init': None, 'start': fireflies.firefly_role},
+            'colourwave': {'init': None, 'start': colourwave.colourwave_role},
+            'trail': {'init': None, 'start': trail.trail_role},
+            'rainbow': {'init': None, 'start': smoothrainbow.rainbow_role},
+            'none': {'init': None, 'start': dummy_role}
         }
     }
 
@@ -114,6 +114,16 @@ class Roles:
     @classmethod
     def default_secondary(cls):
         return dummy_role
+
+    @classmethod
+    def init_primary(cls, primary_role):
+        if cls.map['primary'][primary_role]['init']:
+            cls.map['primary'][primary_role]['init']()
+
+    @classmethod
+    def init_secondary(cls, secondary_role):
+        if cls.map['secondary'][secondary_role]['init']:
+            cls.map['secondary'][secondary_role]['init']()        
 
     @classmethod
     def start_primary(cls, primary_role):

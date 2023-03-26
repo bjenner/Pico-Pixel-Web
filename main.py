@@ -35,11 +35,17 @@ from picoconfig import PicoConf
 from threadconfig import ThreadConf
 from picoweb import PicoWeb
 
-# this may help with memory errors. 
-
+# First inintialize the configuration
 PicoConf.init()
+
+# This might change but for now assume that we initialize wifi
 PicoWeb.init()
+
+# Next initialize the primary and secondary threads (if necessary)
+ThreadConf.init_primary()
+ThreadConf.init_secondary()
     
+# Now start the secondary then the primary
 thread_one = _thread.start_new_thread(ThreadConf.start_secondary, ())
 ThreadConf.start_primary()
 
