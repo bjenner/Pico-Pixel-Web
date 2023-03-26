@@ -17,13 +17,11 @@ class ThreadConf:
 
     @classmethod
     def start_primary(cls):
-        role_map = Roles.primary_map()
-        role_map[cls.primary_role]()
+        Roles.start_primary(cls.primary_role)
 
     @classmethod
     def start_secondary(cls):
-        role_map = Roles.secondary_map()
-        role_map[cls.secondary_role]()
+        Roles.start_secondary(cls.secondary_role)
 
     @classmethod
     def get_roles(cls):

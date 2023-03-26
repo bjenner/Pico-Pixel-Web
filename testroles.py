@@ -1,10 +1,13 @@
 '''
-test_role.py - just a couple of sample threads
+testrole.py - just a couple of sample threads
 '''
 from time import sleep
 
 from controls import Flag
 from mylogging import safe_print
+
+def test_init():
+    safe_print( "Test initialization" )
 
 # Thread zero runs the primary role
 def test_primary():

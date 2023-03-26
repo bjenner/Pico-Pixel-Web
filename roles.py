@@ -10,8 +10,11 @@ import trail
 import testroles
 
 
+def dummy_init():
+    print("dummy_init")
+
 def dummy_role():
-    print("dummy")
+    print("dummy_role")
     while True:
         pass
 
@@ -19,24 +22,24 @@ def dummy_role():
 class Roles:
     map = {
         'primary': {
-            'test': testroles.test_primary,
-            'web': dummy_role,
-            'none': dummy_role
+            'test': {'init': testroles.test_init, 'start': testroles.test_primary},
+            'web': {'init': dummy_init, 'start': dummy_role},
+            'none': {'init': dummy_init, 'start': dummy_role}
         },
         'secondary': {
-            'test': testroles.test_secondary,
-            'fireflies': fireflies.firefly_role,
-            'colourwave': colourwave.colourwave_role,
-            'trail': trail.trail_role,
-            'rainbow': smoothrainbow.rainbow_role,
-            'none': dummy_role
+            'test': {'init': dummy_init, 'start': testroles.test_secondary},
+            'fireflies': {'init': dummy_init, 'start': fireflies.firefly_role},
+            'colourwave': {'init': dummy_init, 'start': colourwave.colourwave_role},
+            'trail': {'init': dummy_init, 'start': trail.trail_role},
+            'rainbow': {'init': dummy_init, 'start': smoothrainbow.rainbow_role},
+            'none': {'init': dummy_init, 'start': dummy_role}
         }
     }
 
     @classmethod
     def set_role(cls, thread, name, role):
         safe_print(f"Setting {thread} role to {name} with fn {role}")
-        cls.map[thread][name] = role
+        cls.map[thread][name]['start'] = role
 
     webmap = {
         "primary":
@@ -113,16 +116,16 @@ class Roles:
         return dummy_role
 
     @classmethod
-    def primary_map(cls):
-        return cls.map['primary']
+    def start_primary(cls, primary_role):
+        cls.map['primary'][primary_role]['start']()
 
     @classmethod
-    def secondary_map(cls):
-        return cls.map['secondary']
+    def start_secondary(cls, secondary_role):
+        cls.map['secondary'][secondary_role]['start']()        
 
     @classmethod
     def check_role(cls, thread, role, fn):
-        current = cls.map[thread][role]
+        current = cls.map[thread][role]['start']
         if current == fn:
             safe_print("match")
         else:
