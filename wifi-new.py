@@ -5,8 +5,8 @@ import machine
 import os
 import utime
 import _thread
-from pico_config import PicoConf, WifiConf, APConf
-from pico_status import PicoStatus
+from picoconfig import PicoConf, WifiConf, APConf
+from picostatus import PicoStatus
 from mylogging import safe_print
 
 
@@ -55,6 +55,42 @@ def setup_mode():
     ip = ap.ifconfig()[0]
     print (ip)
     dns.run_catchall(ip)
+
+def setup_mode():
+    print("Entering setup mode...")
+    
+    def ap_index(request):
+        if request.headers.get("host") != AP_DOMAIN:
+            return render_template(f"website/config/{AP_TEMPLATE_PATH}/redirect.html", domain = AP_DOMAIN)
+
+        return render_template(f"website/config/{AP_TEMPLATE_PATH}/index.html")
+
+    def ap_configure(request):
+        print("Saving wifi credentials...")
+
+        with open(WIFI_FILE, "w") as f:
+            json.dump(request.form, f)
+            f.close()
+
+        # Reboot from new thread after we have responded to the user.
+        _thread.start_new_thread(machine_reset, ())
+        return render_template(f"website/config/{AP_TEMPLATE_PATH}/configured.html", ssid = request.form["ssid"])
+        
+    def ap_catch_all(request):
+        if request.headers.get("host") != AP_DOMAIN:
+            return render_template(f"website/config/{AP_TEMPLATE_PATH}/redirect.html", domain = AP_DOMAIN)
+
+        return "Not found.", 404
+
+    server.add_route("/", handler = ap_index, methods = ["GET"])
+    server.add_route("/", handler = ap_configure, methods = ["POST"])
+    server.set_callback(ap_catch_all)
+
+    ap = access_point(AP_NAME)
+    ip = ap.ifconfig()[0]
+    print (ip)
+    dns.run_catchall(ip)
+
 
 def application_mode():
     print("Entering application mode.")
@@ -155,6 +191,74 @@ if __name__ == "__main__":
     PicoConf.read_file()
     start_net( WifiConf.ssid(), WifiConf.password() )
     server.run()
+    
+        DOMAIN = "pico.wireless"  # This is the address that is shown on the Captive Portal
+
+    safe_print( "wifi testing..." )
+
+    PicoConf.read_file()
+    safe_print(f"AP enabled: {APConf.is_enabled()}")
+    safe_print(f"ssid: {WifiConf.ssid()}")
+    safe_print(f"password: {WifiConf.password()}")
+
+    Wifi.start_wifi()
+    
+    @server.route("/", methods=['GET'])
+    def index(request):
+        """ Render the Index page"""
+        if request.method == 'GET':
+            logging.debug("Get request")
+            return render_template("index.html")
+
+    # microsoft windows redirects
+    @server.route("/ncsi.txt", methods=["GET"])
+    def hotspot(request):
+        print(request)
+        print("ncsi.txt")
+        return "", 200
+
+
+    @server.route("/connecttest.txt", methods=["GET"])
+    def hotspot(request):
+        print(request)
+        print("connecttest.txt")
+        return "", 200
+
+
+    @server.route("/redirect", methods=["GET"])
+    def hotspot(request):
+        print(request)
+        print("****************ms redir*********************")
+        return redirect(f"http://{DOMAIN}/", 302)
+
+    # android redirects
+    @server.route("/generate_204", methods=["GET"])
+    def hotspot(request):
+        print(request)
+        print("******generate_204********")
+        return redirect(f"http://{DOMAIN}/", 302)
+
+    # apple redir
+    @server.route("/hotspot-detect.html", methods=["GET"])
+    def hotspot(request):
+        print(request)
+        """ Redirect to the Index Page """
+        return render_template("index.html")
+
+
+    @server.catchall()
+    def catch_all(request):
+        print("***************CATCHALL***********************\n" + str(request))
+        return redirect("http://" + DOMAIN + "/")
+
+    server.run()
+    logging.info("Webserver Started")
+    
+    while True:
+        print(".", end="")
+        time.sleep(10)
+        pass
+
 
 else:
     safe_print( __name__ + " imported")
