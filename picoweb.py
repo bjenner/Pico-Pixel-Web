@@ -116,8 +116,7 @@ class PicoWeb:
 
     @classmethod
     def website_role( cls ):
-        ip_address = connect_to_wifi( WifiConf.ssid(), WifiConf.password() )
-        safe_print( f"IP: {ip_address}"  )
+        Wifi.start()
         cls.setup_website()
         server.run()
 
