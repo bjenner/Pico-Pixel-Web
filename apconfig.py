@@ -1,6 +1,7 @@
 '''
 apconfig - Access Point Configuration
 '''
+from mylogging import safe_print
 
 class APConf:
     ap_enabled = True
@@ -57,7 +58,6 @@ class APConf:
                 "Access Point Password": ""}
 
 if __name__ == "__main__":
-
     safe_print("AP SSID: " + APConf.ssid())
     safe_print("AP Password: " + APConf.password())
 
